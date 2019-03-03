@@ -1,3 +1,4 @@
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<iostream>
@@ -171,7 +172,7 @@ void board()
 	}
 	cout << "     a    b    c    d    e    f    g    h" << endl;
 	cout << "  " ;
-	
+
 }
 
 int main()
