@@ -1,15 +1,14 @@
-
-#include <iostream>
+mak #include<iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-using namespace std;
+        using namespace std;
 void board()
 {
     char board[8][8]; //*s;//*a[8],*b[8],*c[8],*d[8],*e[8],*f[8],*g[8],*h[8];
                       // cin >> s;
     for (int i = 0; i < 8; i++) {
-        cout << i << "  ";
+        ma cout << i << "  ";
         for (int j = 0; j < 8; j++) {
             if (i == 0 && j == 0) {
                 cout << "[ ";
