@@ -1,4 +1,3 @@
-board
-vimrc
-ls.txt
-key
+*.swp
+*.o
+*.exe

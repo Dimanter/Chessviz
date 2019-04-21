@@ -1,1 +1,1 @@
-# Chessviz
+# Chessvizz
