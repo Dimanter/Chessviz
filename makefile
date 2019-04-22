@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Werror -std=c99
+CFLAGS = -Wall -Werror -std=c++11
 OBJ = g++ $(CFLAGS) -c $< -o $@
 
 .PHONY: clean
@@ -24,10 +24,10 @@ build/board.o: src/board.cpp src/board.h
 	$(OBJ)
 
 bin/test: build/test.o
-	g++ -Wall -Werror build/test.o -o bin/test
+	g++ -Wall -Werror -std=c++11 build/test.o -o bin/test
 
 build/test.o: test/test.cpp 
-	g++ -Wall -Werror -c test/test.cpp -o build/test.o -Ithirdparty
+	g++ -Wall -Werror -std=c++11 -c test/test.cpp -o build/test.o -Ithirdparty
 
 clean:
 	rm build/*.o
