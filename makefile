@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Werror 
+CFLAGS = -Wall -Werror -std=c99
 OBJ = g++ $(CFLAGS) -c $< -o $@
 
 .PHONY: clean
