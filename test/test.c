@@ -1,7 +1,4 @@
-#define CATCH_CONFIG_MAIN
-#include "catch.hpp"
-#include <iostream>
-using namespace std;
+#include "ctest.h"
 
 void BoardP(char* ptr[], int n, int m)
 {
@@ -212,7 +209,6 @@ void BoardR(char* ptr[], int n, int m)
 int pawn(char* ptr[], int n, int m, char a[], int p, int hod)
 {
     int top1 = a[2] - 48, top2 = a[5] - 48, top3 = a[1] - 97, top4 = a[4] - 97;
-    cout << endl;
     top1 = n - top1;
     top2 = m - top2;
     switch (ptr[top1][top3]) {
@@ -271,7 +267,7 @@ int kNight(char* ptr[], int n, int m, char a[], int p, int hod)
 {
     int top1 = a[2] - 48, top2 = a[5] - 48, top3 = a[1] - 97, top4 = a[4] - 97,
         tmp1, tmp2;
-    cout << endl;
+
     top1 = n - top1;
     top2 = m - top2;
     tmp1 = top1 - top2;
@@ -338,7 +334,7 @@ int kNight(char* ptr[], int n, int m, char a[], int p, int hod)
 int king(char* ptr[], int n, int m, char a[], int p, int hod)
 {
     int top1 = a[2] - 48, top2 = a[5] - 48, top3 = a[1] - 97, top4 = a[4] - 97;
-    cout << endl;
+
     top1 = n - top1;
     top2 = m - top2;
     if (top1 - top2 > 1 || top1 - top2 < -1) {
@@ -383,7 +379,7 @@ int queen(char* ptr[], int n, int m, char a[], int p, int hod)
 {
     int top1 = a[2] - 48, top2 = a[5] - 48, top3 = a[1] - 97, top4 = a[4] - 97,
         s = 0;
-    cout << endl;
+
     top1 = n - top1;
     top2 = m - top2;
     if (hod % 2 != 0) {
@@ -692,7 +688,6 @@ int bishop(char* ptr[], int n, int m, char a[], int p, int hod)
 {
     int top1 = a[2] - 48, top2 = a[5] - 48, top3 = a[1] - 97, top4 = a[4] - 97,
         s = 0;
-    cout << endl;
     top1 = n - top1;
     top2 = m - top2;
     if (hod % 2 != 0) {
@@ -849,7 +844,7 @@ int bishop(char* ptr[], int n, int m, char a[], int p, int hod)
 int rook(char* ptr[], int n, int m, char a[], int p, int hod)
 {
     int top1 = a[2] - 48, top2 = a[5] - 48, top3 = a[1] - 97, top4 = a[4] - 97;
-    cout << endl;
+
     top1 = n - top1;
     top2 = m - top2;
     if (ptr[top1][top3] == 'r') {
@@ -997,89 +992,91 @@ int rook(char* ptr[], int n, int m, char a[], int p, int hod)
     return 0;
 }
 
-ST_CASE("Testing for Chess Pawn ", "[Chess]")
+CTEST(move, move_Pawn)
+{
+    int hod = 2;
+    char board[8][8];
+    char a[6];
+    char* b[8];
+    for (int i = 0; i < 8; i++)
+        b[i] = board[i];
+    BoardP(b, 8, 8);
+    a[0] = 'p';
+    a[1] = 'b';
+    a[2] = '2';
+    a[3] = '-';
+    a[4] = 'b';
+    a[5] = '4';
+    int x = pawn(b, 8, 8, a, 6, hod);
+    int verno = 4;
+    int neverno = 5;
+    ASSERT_EQUAL(x, verno); // hod na 2 kletki iz nachala
+    a[1] = 'b';
+    a[2] = '2';
+    a[3] = '-';
+    a[4] = 'b';
+    a[5] = '3';
+    x = pawn(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // hod na 1 kletku
+    a[1] = 'b';
+    a[2] = '2';
+    a[3] = '-';
+    a[4] = 'a';
+    a[5] = '3';
+    x = pawn(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka hoda po diagonali
+    a[1] = 'b';
+    a[2] = '2';
+    a[3] = '-';
+    a[4] = 'a';
+    a[5] = '3';
+    x = pawn(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka hoda po diagonali
+    a[1] = 'b';
+    a[2] = '2';
+    a[3] = '-';
+    a[4] = 'b';
+    a[5] = '5';
+    x = pawn(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka hoda na 3 kletki
+    a[1] = 'a';
+    a[2] = '2';
+    a[3] = '-';
+    a[4] = 'a';
+    a[5] = '4';
+    x = pawn(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka hoda esli vperedi figura
+    a[1] = 'a';
+    a[2] = '2';
+    a[3] = '-';
+    a[4] = 'a';
+    a[5] = '1';
+    x = pawn(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka hoda nazad
+    a[1] = 'c';
+    a[2] = '2';
+    a[3] = 'x';
+    a[4] = 'd';
+    a[5] = '3';
+    x = pawn(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka s'edaniya figuri
+    a[1] = 'e';
+    a[2] = '2';
+    a[3] = 'x';
+    a[4] = 'd';
+    a[5] = '3';
+    x = pawn(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka s'edaniya figuri
+    a[1] = 'd';
+    a[2] = '2';
+    a[3] = 'x';
+    a[4] = 'd';
+    a[5] = '3';
+    x = pawn(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka s'edaniya figuri
+}
 
-int hod = 2;
-char board[8][8];
-char a[6];
-char* b[8];
-for (int i = 0; i < 8; i++)
-    b[i] = board[i];
-BoardP(b, 8, 8);
-a[0] = 'p';
-a[1] = 'b';
-a[2] = '2';
-a[3] = '-';
-a[4] = 'b';
-a[5] = '4';
-cout << " Testing Pawn" << endl;
-cout << "Test 1   -   Okay" << endl;
-REQUIRE(pawn(b, 8, 8, a, 6, hod) == 4); // hod na 2 kletki iz nachala
-a[1] = 'b';
-a[2] = '2';
-a[3] = '-';
-a[4] = 'b';
-a[5] = '3';
-cout << "Test 2   -   Okay" << endl;
-REQUIRE(pawn(b, 8, 8, a, 6, hod) == 4); // hod na 1 kletku
-a[1] = 'b';
-a[2] = '2';
-a[3] = '-';
-a[4] = 'a';
-a[5] = '3';
-cout << "Test 3   -   Okay" << endl;
-REQUIRE(pawn(b, 8, 8, a, 6, hod) == 5); // proverka hoda po diagonali
-a[1] = 'b';
-a[2] = '2';
-a[3] = '-';
-a[4] = 'a';
-a[5] = '3';
-cout << "Test 4   -   Okay" << endl;
-REQUIRE(pawn(b, 8, 8, a, 6, hod) == 5); // proverka hoda po diagonali
-a[1] = 'b';
-a[2] = '2';
-a[3] = '-';
-a[4] = 'b';
-a[5] = '5';
-cout << "Test 5   -   Okay" << endl;
-REQUIRE(pawn(b, 8, 8, a, 6, hod) == 5); // proverka hoda na 3 kletki
-a[1] = 'a';
-a[2] = '2';
-a[3] = '-';
-a[4] = 'a';
-a[5] = '4';
-cout << "Test 6   -   Okay" << endl;
-REQUIRE(pawn(b, 8, 8, a, 6, hod) == 5); // proverka hoda esli vperedi figura
-a[1] = 'a';
-a[2] = '2';
-a[3] = '-';
-a[4] = 'a';
-a[5] = '1';
-cout << "Test 7   -   Okay" << endl;
-REQUIRE(pawn(b, 8, 8, a, 6, hod) == 5); // proverka hoda nazad
-a[1] = 'c';
-a[2] = '2';
-a[3] = 'x';
-a[4] = 'd';
-a[5] = '3';
-cout << "Test 8   -   Okay" << endl;
-REQUIRE(pawn(b, 8, 8, a, 6, hod) == 4); // proverka s'edaniya figuri
-a[1] = 'e';
-a[2] = '2';
-a[3] = 'x';
-a[4] = 'd';
-a[5] = '3';
-cout << "Test 9   -   Okay" << endl;
-REQUIRE(pawn(b, 8, 8, a, 6, hod) == 4); // proverka s'edaniya figuri
-a[1] = 'd';
-a[2] = '2';
-a[3] = 'x';
-a[4] = 'd';
-a[5] = '3';
-cout << "Test 10  -   Okay" << endl;
-REQUIRE(pawn(b, 8, 8, a, 6, hod) == 5); // proverka s'edaniya figuri
-
-TEST_CASE("Testing for Chess Knight ", "[Chess]")
+CTEST(move, move_kNight)
 {
     int hod = 2;
     char board[8][8];
@@ -1094,72 +1091,69 @@ TEST_CASE("Testing for Chess Knight ", "[Chess]")
     a[3] = '-';
     a[4] = 'c';
     a[5] = '3';
-    cout << "Testing kNight -" << endl;
-    cout << "Test 1   -   Okay" << endl;
-    REQUIRE(kNight(b, 8, 8, a, 6, hod) == 4); // proverka hoda bukvoi �
+    int x = kNight(b, 8, 8, a, 6, hod);
+    int verno = 4;
+    int neverno = 5;
+    ASSERT_EQUAL(x, verno); // proverka hoda bukvoi �
     a[1] = 'b';
     a[2] = '1';
     a[3] = '-';
     a[4] = 'a';
     a[5] = '3';
-    cout << "Test 2   -   Okay" << endl;
-    REQUIRE(kNight(b, 8, 8, a, 6, hod) == 4); // proverka hoda bukvoi � v levo
+    x = kNight(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda bukvoi � v levo
     a[1] = 'e';
     a[2] = '1';
     a[3] = '-';
     a[4] = 'c';
     a[5] = '2';
-    cout << "Test 3   -   Okay" << endl;
-    REQUIRE(kNight(b, 8, 8, a, 6, hod)
-            == 4); // proverka hoda bukvoi � v levo gorizontalno vverh
+    x = kNight(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda bukvoi � v levo gorizontalno vverh
     a[1] = 'e';
     a[2] = '1';
     a[3] = '-';
     a[4] = 'g';
     a[5] = '2';
-    cout << "Test 4   -   Okay" << endl;
-    REQUIRE(kNight(b, 8, 8, a, 6, hod)
-            == 4); // proverka hoda bukvoi � v pravo gorizontalno vverh
+    x = kNight(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda bukvoi � v pravo gorizontalno vverh
     a[1] = 'e';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'g';
     a[5] = '3';
-    cout << "Test 5   -   Okay" << endl;
-    REQUIRE(kNight(b, 8, 8, a, 6, hod)
-            == 4); // proverka hoda bukvoi � v pravo gorizontalno vniz
+    x = kNight(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda bukvoi � v pravo gorizontalno vniz
     a[1] = 'e';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'c';
     a[5] = '3';
-    cout << "Test 6   -   Okay" << endl;
-    REQUIRE(kNight(b, 8, 8, a, 6, hod)
-            == 4); // proverka hoda bukvoi � v pravo gorizontalno vniz
+    x = kNight(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda bukvoi � v pravo gorizontalno vniz
     a[1] = 'e';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'g';
     a[5] = '6';
-    cout << "Test 7   -   Okay" << endl;
-    REQUIRE(kNight(b, 8, 8, a, 6, hod) == 5); // lozhniy hod po diagonaly
+    x = kNight(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // lozhniy hod po diagonaly
     a[1] = 'e';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'h';
     a[5] = '4';
-    cout << "Test 8   -   Okay" << endl;
-    REQUIRE(kNight(b, 8, 8, a, 6, hod) == 5); // lozhniy hod po gorizontaly
+    x = kNight(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // lozhniy hod po gorizontaly
     a[1] = 'e';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'e';
     a[5] = '7';
-    cout << "Test 9   -   Okay" << endl;
-    REQUIRE(kNight(b, 8, 8, a, 6, hod) == 5); // lozhniy hod po vetikaly
+    x = kNight(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // lozhniy hod po vetikaly
 }
 
-TEST_CASE("Testing for Chess King ", "[Chess]")
+CTEST(move, move_King)
 {
     int hod = 2;
     char board[8][8];
@@ -1174,47 +1168,48 @@ TEST_CASE("Testing for Chess King ", "[Chess]")
     a[3] = '-';
     a[4] = 'c';
     a[5] = '3';
-    cout << "Testing king -" << endl;
-    cout << "Test 1   -   Okay" << endl;
-    REQUIRE(king(b, 8, 8, a, 6, hod) == 4); // proverka hoda vniz
+    int x = king(b, 8, 8, a, 6, hod);
+    int verno = 4;
+    int neverno = 5;
+    ASSERT_EQUAL(x, verno); // proverka hoda vniz
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'c';
     a[5] = '5';
-    cout << "Test 2   -   Okay" << endl;
-    REQUIRE(king(b, 8, 8, a, 6, hod) == 4); // proverka hoda vverh
+    x = king(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda vverh
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'c';
     a[5] = '3';
-    cout << "Test 3   -   Okay" << endl;
-    REQUIRE(king(b, 8, 8, a, 6, hod) == 4); // proverka hoda po vertikaly
+    x = king(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda po vertikaly
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'd';
     a[5] = '3';
-    cout << "Test 4   -   Okay" << endl;
-    REQUIRE(king(b, 8, 8, a, 6, hod) == 4); // proverka hoda po diagonaly
+    x = king(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda po diagonaly
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'c';
     a[5] = '2';
-    cout << "Test 5   -   Okay" << endl;
-    REQUIRE(king(b, 8, 8, a, 6, hod) == 5); // proverka lozhnogo hoda
+    x = king(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka lozhnogo hoda
     a[1] = 'c';
     a[2] = '4';
     a[3] = 'x';
     a[4] = 'd';
     a[5] = '4';
-    cout << "Test 6   -   Okay" << endl;
-    REQUIRE(king(b, 8, 8, a, 6, hod) == 4); // proverka s'edaniya
+    x = king(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka s'edaniya
 }
 
-TEST_CASE("Testing for Chess Queen ", "[Chess]")
+CTEST(move, move_queen)
 {
     int hod = 2;
     char board[8][8];
@@ -1222,8 +1217,6 @@ TEST_CASE("Testing for Chess Queen ", "[Chess]")
     char* b[8];
     for (int i = 0; i < 8; i++)
         b[i] = board[i];
-    cout << "Testing Queen -" << endl;
-    cout << "Test 1   -   Okay" << endl << endl;
     BoardQ(b, 8, 8);
     a[0] = 'q';
     a[1] = 'c';
@@ -1231,46 +1224,48 @@ TEST_CASE("Testing for Chess Queen ", "[Chess]")
     a[3] = '-';
     a[4] = 'c';
     a[5] = '1';
-    cout << "Test 2   -   Okay" << endl;
-    REQUIRE(queen(b, 8, 8, a, 6, hod) == 4); // proverka hoda po vetikali
+    int x = queen(b, 8, 8, a, 6, hod);
+    int verno = 4;
+    int neverno = 5;
+    ASSERT_EQUAL(x, verno); // proverka hoda po vetikali
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'a';
     a[5] = '4';
-    cout << "Test 3   -   Okay" << endl;
-    REQUIRE(queen(b, 8, 8, a, 6, hod) == 4); // proverka hoda po gorizontali
+    x = queen(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda po gorizontali
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'g';
     a[5] = '4';
-    cout << "Test 4   -   Okay" << endl;
-    REQUIRE(queen(b, 8, 8, a, 6, hod) == 5); // proverka hoda cherez figuru
+    x = queen(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka hoda cherez figuru
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'f';
     a[5] = '7';
-    cout << "Test 5   -   Okay" << endl;
-    REQUIRE(queen(b, 8, 8, a, 6, hod) == 4); // proverka hoda po diagonali
+    x = queen(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda po diagonali
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'd';
     a[5] = '1';
-    cout << "Test 6   -   Okay" << endl;
-    REQUIRE(queen(b, 8, 8, a, 6, hod) == 5); // proverka lozhnogo hoda
+    x = queen(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka lozhnogo hoda
     a[1] = 'c';
     a[2] = '4';
     a[3] = 'x';
     a[4] = 'd';
     a[5] = '4';
-    cout << "Test 7   -   Okay" << endl;
-    REQUIRE(queen(b, 8, 8, a, 6, hod) == 4); // proverka s'edaniya
+    x = queen(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka s'edaniya
 }
 
-TEST_CASE("Testing for Chess Bishop ", "[Chess]")
+CTEST(move, move_Bishop)
 {
     int hod = 2;
     char board[8][8];
@@ -1285,40 +1280,41 @@ TEST_CASE("Testing for Chess Bishop ", "[Chess]")
     a[3] = '-';
     a[4] = 'f';
     a[5] = '7';
-    cout << "Testing Bishop" << endl;
-    cout << "Test 1   -   Okay" << endl;
-    REQUIRE(bishop(b, 8, 8, a, 6, hod) == 5); // proverka hoda  cherez figuru
+    int x = bishop(b, 8, 8, a, 6, hod);
+    int verno = 4;
+    int neverno = 5;
+    ASSERT_EQUAL(x, neverno); // proverka hoda  cherez figuru
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'a';
     a[5] = '6';
-    cout << "Test 2   -   Okay" << endl;
-    REQUIRE(bishop(b, 8, 8, a, 6, hod) == 4); // proverka hoda po diagonali
+    x = bishop(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda po diagonali
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'c';
     a[5] = '1';
-    cout << "Test 3   -   Okay" << endl;
-    REQUIRE(bishop(b, 8, 8, a, 6, hod) == 5); // proverka hoda po vertikali
+    x = bishop(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka hoda po vertikali
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'a';
     a[5] = '4';
-    cout << "Test 4   -   Okay" << endl;
-    REQUIRE(bishop(b, 8, 8, a, 6, hod) == 5); // proverka hoda po gorizontali
+    x = bishop(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka hoda po gorizontali
     a[1] = 'c';
     a[2] = '4';
     a[3] = 'x';
     a[4] = 'e';
     a[5] = '6';
-    cout << "Test 5   -   Okay" << endl;
-    REQUIRE(bishop(b, 8, 8, a, 6, hod) == 4); // proverka s'edaniya
+    x = bishop(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka s'edaniya
 }
 
-TEST_CASE("Testing for Chess Rook ", "[Chess]")
+CTEST(move, move_Rook)
 {
     int hod = 2;
     char board[8][8];
@@ -1333,35 +1329,36 @@ TEST_CASE("Testing for Chess Rook ", "[Chess]")
     a[3] = '-';
     a[4] = 'c';
     a[5] = '1';
-    cout << "Testing Rook" << endl;
-    cout << "Test 1   -   Okay" << endl;
-    REQUIRE(rook(b, 8, 8, a, 6, hod) == 4); // proverka hoda po vertikali
+    int x = rook(b, 8, 8, a, 6, hod);
+    int verno = 4;
+    int neverno = 5;
+    ASSERT_EQUAL(x, verno); // proverka hoda po vertikali
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'a';
     a[5] = '4';
-    cout << "Test 2   -   Okay" << endl;
-    REQUIRE(rook(b, 8, 8, a, 6, hod) == 4); // proverka hoda po gorizontali
+    x = rook(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka hoda po gorizontali
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'g';
     a[5] = '4';
-    cout << "Test 3   -   Okay" << endl;
-    REQUIRE(rook(b, 8, 8, a, 6, hod) == 5); // proverka hoda cherez figuru
+    x = rook(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka hoda cherez figuru
     a[1] = 'c';
     a[2] = '4';
     a[3] = '-';
     a[4] = 'f';
     a[5] = '7';
-    cout << "Test 4   -   Okay" << endl;
-    REQUIRE(rook(b, 8, 8, a, 6, hod) == 5); // proverka hoda po diagonali
+    x = rook(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, neverno); // proverka hoda po diagonali
     a[1] = 'c';
     a[2] = '4';
     a[3] = 'x';
     a[4] = 'e';
     a[5] = '4';
-    cout << "Test 5   -   Okay" << endl;
-    REQUIRE(rook(b, 8, 8, a, 6, hod) == 4); // proverka s'edaniya
+    x = rook(b, 8, 8, a, 6, hod);
+    ASSERT_EQUAL(x, verno); // proverka s'edaniya
 }
